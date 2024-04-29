@@ -42,8 +42,11 @@ var text = `Как видите, он  спускается  по  лестни�
 	иногда,  особенно  когда  папа  дома,  он больше любит тихонько
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
+
 var lessThatTenWords = "Lorem ipsum dolor sit amet, consectetur adipiscing."
+
 var exampleText = "cat and dog, one dog,two cats and one man"
+
 var alphabeticalText = "aaa a aa, bb aa, a aaa bb aa bb"
 
 func TestTop10(t *testing.T) {
