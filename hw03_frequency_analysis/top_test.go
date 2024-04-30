@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -42,6 +42,12 @@ var text = `Как видите, он  спускается  по  лестни�
 	иногда,  особенно  когда  папа  дома,  он больше любит тихонько
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
+
+var lessThatTenWords = "Lorem ipsum dolor sit amet, consectetur adipiscing."
+
+var exampleText = "cat and dog, one dog,two cats and one man"
+
+var alphabeticalText = "aaa a aa, bb aa, a aaa bb aa bb"
 
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
@@ -78,5 +84,41 @@ func TestTop10(t *testing.T) {
 			}
 			require.Equal(t, expected, Top10(text))
 		}
+	})
+
+	t.Run("less than 10 words", func(t *testing.T) {
+		expected := []string{
+			"adipiscing",  // 1
+			"amet",        // 1
+			"consectetur", // 1
+			"dolor",       // 1
+			"ipsum",       // 1
+			"lorem",       // 1
+			"sit",         // 1
+		}
+		require.Equal(t, expected, Top10(lessThatTenWords))
+	})
+
+	t.Run("example test", func(t *testing.T) {
+		expected := []string{
+			"and",     // 2
+			"one",     // 2
+			"cat",     // 1
+			"cats",    // 1
+			"dog",     // 1
+			"dog,two", // 1
+			"man",     // 1
+		}
+		require.Equal(t, expected, Top10(exampleText))
+	})
+
+	t.Run("alphabetical test", func(t *testing.T) {
+		expected := []string{
+			"aa",  // 3
+			"bb",  // 3
+			"a",   // 2
+			"aaa", // 2
+		}
+		require.Equal(t, expected, Top10(alphabeticalText))
 	})
 }
