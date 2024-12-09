@@ -26,28 +26,33 @@ func ReadDir(dir string) (Environment, error) {
 	env := make(Environment)
 	for _, file := range files {
 		name := file.Name()
-		if !file.IsDir() && name != "" && !strings.Contains(name, "=") {
-			content, _ := func(dirname string, filename string) (string, error) {
-				f, err := os.Open(filepath.Join(dirname, filename))
-				if err != nil {
-					return "", err
-				}
-				defer f.Close()
-				scanner := bufio.NewScanner(f)
-				if !scanner.Scan() {
-					return "", fmt.Errorf("error reading file %s", filename)
-				}
-				firstline := scanner.Text()
-				if err := scanner.Err(); err != nil {
-					return "", err
-				}
-				return strings.ReplaceAll(strings.TrimRight(firstline, " \t"), "\x00", "\n"), nil
-			}(dir, name)
-
-			env[name] = EnvValue{
-				Value:      content,
-				NeedRemove: content == "",
+		if file.IsDir() || name == "" || strings.Contains(name, "=") {
+			continue
+		}
+		content, e := func(dirname string, filename string) (string, error) {
+			f, err := os.Open(filepath.Join(dirname, filename))
+			if err != nil {
+				return "", err
 			}
+			defer f.Close()
+			scanner := bufio.NewScanner(f)
+			if !scanner.Scan() {
+				return "", fmt.Errorf("error reading file %s", filename)
+			}
+			firstline := scanner.Text()
+			if err := scanner.Err(); err != nil {
+				return "", err
+			}
+			return strings.ReplaceAll(strings.TrimRight(firstline, " \t"), "\x00", "\n"), nil
+		}(dir, name)
+
+		if e != nil {
+			content = ""
+		}
+
+		env[name] = EnvValue{
+			Value:      content,
+			NeedRemove: content == "",
 		}
 	}
 	return env, nil
