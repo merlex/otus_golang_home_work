@@ -17,6 +17,8 @@ linters-settings:
           - "!$test"
         allow:
           - $gostd
+  exhaustive:
+    default-signifies-exhaustive: true
           
 issues:
   exclude-rules:
