@@ -32,8 +32,8 @@ func GetDomainStat(r io.Reader, domain string) (DomainStat, error) {
 			return nil, fmt.Errorf("get users error: %w", err)
 		}
 		matched := strings.Contains(user.Email, domain)
-		if matched {
-			indFindStr := strings.Index(user.Email, "@")
+		indFindStr := strings.Index(user.Email, "@")
+		if matched && indFindStr != -1 {
 			str := strings.ToLower(user.Email[indFindStr+1 : len(user.Email)])
 			result[str]++
 		}
